@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +8,140 @@
     <link rel="stylesheet" href="styles.css">
     <title>Memory Game</title>
 </head>
+
 <body>
-    
+    <div class="container">
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+        <div class="box hideColor">1</div>
+    </div>
+
+    <script>
+        var boxes = document.querySelectorAll(".container .box");
+
+        const colors = [
+            '#0099e5', '#34bf49', '#511378', '#d20962',
+            '#ff4c4c', '#e4e932', '#00112c', '#52565e'
+        ];
+        const noOfColors = colors.length;
+        const noOfBoxes = boxes.length;
+
+
+        var clickedElements = [];
+
+        function assignIndexToBox(box, i) {
+            box.innerText = i;
+            box.id = i;
+        }
+
+        function assignColorToBox(box, i) {
+            if (i >= noOfColors) {
+                box.style.backgroundColor = colors[i - noOfColors];
+            } else {
+                box.style.backgroundColor = colors[i];
+            }
+        }
+
+        function randomizeColor(box) {
+            box.style.order = parseInt(Math.random() * noOfBoxes);
+        }
+
+        function freezeBoxes() {
+            var box1ID = clickedElements[0].id;
+            var box1ID = clickedElements[1].id;
+
+            var box1 = document.getElementById(box1ID);
+            var box2 = document.getElementById(box2ID);
+
+            box1.classList.add("freeze");
+            box2.classList.add("freeze");
+        }
+
+        function hideThemAfter() {
+            setTimeout(function () {
+
+                var box1ID = clickedElements[0].id;
+                var box1ID = clickedElements[1].id;
+
+                var box1 = document.getElementById(box1ID);
+                var box2 = document.getElementById(box2ID);
+
+                box1.classList.add("hideColor");
+                box2.classList.add("hideColor");
+
+                // clickedElements = [];
+            }, 700);
+        }
+
+        function gameOver() {
+            if (document.querySelectorAll(".freeze").length == noOfBoxes) {
+                console.log("Finished!")
+                window.location.reload();
+
+            }
+        }
+
+        function handleBoxClick() {
+            if (this.classList.contains("freeze") == false) {
+                this.classList.remove("hideColor");
+
+                // console.log(this.id, this.style.backgroundColor);
+                var obj = { id: this.id, color: this.style.backgroundColor }
+                clickedElements.push(obj);
+
+                console.log(clickedElements);
+                if (clickedElements.length == 2) {
+                    if (clickedElements[0].color == clickedElements[1].color) {
+                        console.log("Same color!");
+                        freezeBoxes();
+                        clickedElements = [];
+                    } else {
+                        console.log("Not the same color!");
+                        hideThemAfter();
+                    }
+
+                    gameOver();
+                }
+            }
+
+        }
+
+
+        function gameStart() {
+            for (var i = 0; i < boxes.length; i++) {
+                // console.log(i, noOfColors, i-noOfColors);
+                assignIndexToBox(boxes[i], i)
+
+                assignColorToBox(boxes[i], i);
+                randomizeColor(boxes[i]);
+
+                boxes[i].addEventListener('click', handleBoxClick);
+            }
+        }
+
+        gameStart();
+
+
+    </script>
+
+
     <script src="script.js"></script>
 </body>
+
 </html>
